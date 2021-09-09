@@ -1,23 +1,29 @@
 import React,{
     useState} from 'react'
 import {
-    Button,
     Text,
     StyleSheet,
     View,
     TextInput,
-    Alert 
+    Alert,
+    Image,
+    TouchableOpacity
   } from 'react-native'
 import {read } from '../../BD'
 
-const validateLogin = async(username,password,props) => {
-  var value = await read(username);
-  value = await read(username);
+
+const validateLogin = async(useremail,password,props) => {
+  console.log(useremail)
+  console.log(password)
+  var value = await read(useremail);
+  
+  console.log(value)
+  value = await read(useremail);
   if (value !== null){
     value = JSON.parse(value)
     if (password === value[0]){
-      props.navigation.navigate('simpleUser',{
-        nome : username,
+      props.navigation.navigate('Main',{
+        nome : value[0],
         email : value[1]
       })
     }
@@ -44,15 +50,19 @@ const validateLogin = async(username,password,props) => {
 
 
 const Login  = ( props ) => {
-    const [username, changeUsername] = React.useState("");
+    const [useremail, changeEmail] = React.useState("");
     const [password, changePassword] = React.useState("");
     return (
         <View style = {styles.screen}>
+          
+          
+        <Image source={require('../images/Meowylogo.png')} style = {styles.logo} />
+        <Text style = {styles.header}>Login</Text>
         <Text style = {styles.textmargin}>E-mail</Text>
         <TextInput
             style = {styles.input}
-            onChangeText={changeUsername}
-            value={username}
+            onChangeText={changeEmail}
+            value={useremail}
         />
         <Text style = {styles.textmargin}>Senha</Text>
         <TextInput
@@ -61,44 +71,69 @@ const Login  = ( props ) => {
             value={password}
             secureTextEntry={true}
         />
-        <Button color="#C96D1A" style = {styles.botao} title="Logon" onPress={() => {validateLogin(username,password,props)}}></Button>
 
-        <Text style = {styles.createaccount} onPress={() => {props.navigation.navigate('Register')}}>Ainda nao esta cadastrado? Clique Aqui!</Text>
+        <TouchableOpacity style = {styles.botao} onPress={() => {validateLogin(useremail,password,props)}}>
+          <Text style = {styles.insidetext}>Entrar</Text>
+        </TouchableOpacity>
+
+        <Text style = {styles.createaccount} onPress={() => {props.navigation.navigate('Register')}}>Não possui cadastro?<Text style={styles.createaccountinner}> Cadastre-se</Text></Text>
+        <Text style = {styles.createaccountinner} onPress={() => {props.navigation.navigate('Register')}}>Esqueci a senha</Text>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     screen : {
-      padding : 16
+      paddingHorizontal : 26,
+    },
+    logo : {
+      height: 150,
+      width: 250,
+      alignSelf: 'center'
+    },
+    header : {
+      fontSize: 35,
+      alignSelf: 'center',
+      marginBottom: 35
     },
     input : {
-      borderColor : "#000",
-      backgroundColor: '#ffffff',
+      backgroundColor: '#FFF',
       borderRadius : 25,
       marginBottom : 10,
       fontSize: 17
     },
     textmargin : {
       marginBottom : 10,
-      fontSize: 20
+      fontSize: 20,
+      marginLeft: 15,
     },
-    warning : {
-      marginTop : 5,
-      fontSize: 12,
-      color : "#777"
+    insidetext : {
+      fontSize: 17,
+      color: "#FFF"
     },
     botao : {
-        marginTop : 50,
-        borderRadius: 10,
-        borderWidth: 1,
+      alignItems: "center",
+      alignSelf: 'center',
+      width: 150,
+      marginTop : 30,
+      borderRadius: 10,
+      backgroundColor:"#C96D1A",
+      padding: 10,
+      marginBottom:100,
     },
     createaccount : {
       marginBottom : 10,
-      fontSize: 20,
-      textDecorationLine: 'underline',
-      color : "#387cfc"
-    }
+      fontSize: 15,
+      alignSelf: 'center'
+    },
+    createaccountinner : {
+      marginBottom : 10,
+      fontSize: 15,
+      fontWeight: 'bold',
+      alignSelf: 'center'
+      
+    },
+
 })
 
 export default Login
