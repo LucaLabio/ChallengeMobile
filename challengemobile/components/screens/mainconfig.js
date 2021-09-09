@@ -1,42 +1,37 @@
 import React,{
     useState} from 'react'
 import {
-    Button,
+    TouchableOpacity,
     Text,
     StyleSheet,
     View,
     TextInput,
-    Alert 
+    Alert,
+    Image
   } from 'react-native'
-import {read } from '../../BD'
-
 const deslogar = (props) => {
     props.navigation.navigate('Login')
   }
 
 const MainConfig  = ( props ) => {
-    const [username, changeUsername] = React.useState("");
-    const [password, changePassword] = React.useState("");
     return (
         <View style = {styles.screen}>
-        <Text style = {styles.textmargin}>E-mail</Text>
-        <TextInput
-            style = {styles.input}
-            onChangeText={changeUsername}
-            value={username}
-        />
-        <Text style = {styles.textmargin}>Senha</Text>
-        <TextInput
-            style = {styles.input}
-            onChangeText={changePassword}
-            value={password}
-            secureTextEntry={true}
-        />
-        <Button color="#C96D1A" style = {styles.botao} title="Logon" onPress={() => {validateLogin(username,password,props)}}></Button>
+            <Image source={require('../images/Meowylogo.png')} style = {styles.logo} />
+            <Text style = {styles.textmargin}>Nome: {props.route.params.name}</Text>
+            
+            <Text style = {styles.textmargin}>Email: {props.route.params.email}</Text>
 
-        <Text style = {styles.createaccount} onPress={() => {props.navigation.navigate('Register')}}>Ainda nao esta cadastrado? Clique Aqui!</Text>
+            <Text style = {styles.textmargin}>Senha: {props.route.params.password}</Text>
+            
+            <Text style = {styles.textmargin}>Ativar notificacoes:</Text>
 
-        <Button title="Sair" onPress={() => {deslogar(props)}}></Button>
+            <Text style = {styles.textmargin}>Notificacao de agua:</Text>
+
+            <TouchableOpacity style = {styles.botao} onPress={() => {deslogar(props)}}>
+                    <Text style = {styles.insidetext}>Sair</Text>
+            </TouchableOpacity>
+
+            <Text style = {styles.createaccount}>*Esta nao sera a versao final da nossa tela*</Text>
         </View>
     )
 }
@@ -45,6 +40,15 @@ const styles = StyleSheet.create({
     screen : {
       padding : 16
     },
+    logo : {
+        height: 150,
+        width: 250,
+        alignSelf: 'center'
+      },
+      insidetext : {
+        fontSize: 17,
+        color: "#FFF"
+      },
     input : {
       borderColor : "#000",
       backgroundColor: '#ffffff',
@@ -62,16 +66,20 @@ const styles = StyleSheet.create({
       color : "#777"
     },
     botao : {
-        marginTop : 50,
-        borderRadius: 10,
-        borderWidth: 1,
+      alignItems: "center",
+      alignSelf: 'center',
+      width: 150,
+      marginTop : 30,
+      borderRadius: 10,
+      backgroundColor:"#BD5050",
+      padding: 10,
+      marginBottom:100,
     },
     createaccount : {
-      marginBottom : 10,
-      fontSize: 20,
-      textDecorationLine: 'underline',
-      color : "#387cfc"
-    }
+        marginBottom : 10,
+        fontSize: 15,
+        alignSelf: 'center'
+    },
 })
 
 export default MainConfig

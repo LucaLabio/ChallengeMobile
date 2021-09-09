@@ -16,22 +16,22 @@ const MainCats  = ( props ) => {
     const [password, changePassword] = React.useState("");
     return (
         <View style = {styles.screen}>
-        <Text style = {styles.textmargin}>E-mail</Text>
-        <TextInput
-            style = {styles.input}
-            onChangeText={changeUsername}
-            value={username}
-        />
-        <Text style = {styles.textmargin}>Senha</Text>
-        <TextInput
-            style = {styles.input}
-            onChangeText={changePassword}
-            value={password}
-            secureTextEntry={true}
-        />
-        <Button color="#C96D1A" style = {styles.botao} title="Logon" onPress={() => {validateLogin(username,password,props)}}></Button>
+            <Text style = {styles.textmargin}>E-mail</Text>
+            <TextInput
+                style = {styles.input}
+                onChangeText={changeUsername}
+                value={username}
+            />
+            <Text style = {styles.textmargin}>Senha</Text>
+            <TextInput
+                style = {styles.input}
+                onChangeText={changePassword}
+                value={password}
+                secureTextEntry={true}
+            />
+            <Button color="#C96D1A" style = {styles.botao} title="Logon" onPress={() => {validateLogin(username,password,props)}}></Button>
 
-        <Text style = {styles.createaccount} onPress={() => {props.navigation.navigate('Register')}}>Ainda nao esta cadastrado? Clique Aqui!</Text>
+            <Text style = {styles.createaccount} onPress={() => {props.navigation.navigate('Register')}}>Ainda nao esta cadastrado? Clique Aqui!</Text>
         </View>
     )
 }
@@ -57,9 +57,14 @@ const styles = StyleSheet.create({
       color : "#777"
     },
     botao : {
-        marginTop : 50,
-        borderRadius: 10,
-        borderWidth: 1,
+      alignItems: "center",
+      alignSelf: 'center',
+      width: 150,
+      marginTop : 30,
+      borderRadius: 10,
+      backgroundColor:"#C96D1A",
+      padding: 10,
+      marginBottom:100,
     },
     createaccount : {
       marginBottom : 10,

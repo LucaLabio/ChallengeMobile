@@ -13,16 +13,16 @@ import {read } from '../../BD'
 
 
 const validateLogin = async(useremail,password,props) => {
-  var value = await read(useremail);
-  
-  console.log(value)
-  value = await read(useremail);
+    var value = await read(useremail);
+    console.log("Login")
+    console.log(value)
   if (value !== null){
     value = JSON.parse(value)
-    if (password === value[0]){
+    if (password === value[1]){
       props.navigation.navigate('Main',{
         nome : value[0],
-        email : value[1]
+        email : useremail,
+        password : value[1]
       })
     }
     else{
@@ -52,30 +52,28 @@ const Login  = ( props ) => {
     const [password, changePassword] = React.useState("");
     return (
         <View style = {styles.screen}>
-          
-          
-        <Image source={require('../images/Meowylogo.png')} style = {styles.logo} />
-        <Text style = {styles.header}>Login</Text>
-        <Text style = {styles.textmargin}>E-mail</Text>
-        <TextInput
-            style = {styles.input}
-            onChangeText={changeEmail}
-            value={useremail}
-        />
-        <Text style = {styles.textmargin}>Senha</Text>
-        <TextInput
-            style = {styles.input}
-            onChangeText={changePassword}
-            value={password}
-            secureTextEntry={true}
-        />
+          <Image source={require('../images/Meowylogo.png')} style = {styles.logo} />
+          <Text style = {styles.header}>Login</Text>
+          <Text style = {styles.textmargin}>E-mail</Text>
+          <TextInput
+              style = {styles.input}
+              onChangeText={changeEmail}
+              value={useremail}
+          />
+          <Text style = {styles.textmargin}>Senha</Text>
+          <TextInput
+              style = {styles.input}
+              onChangeText={changePassword}
+              value={password}
+              secureTextEntry={true}
+          />
 
-        <TouchableOpacity style = {styles.botao} onPress={() => {validateLogin(useremail,password,props)}}>
-          <Text style = {styles.insidetext}>Entrar</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style = {styles.botao} onPress={() => {validateLogin(useremail,password,props)}}>
+            <Text style = {styles.insidetext}>Entrar</Text>
+          </TouchableOpacity>
 
-        <Text style = {styles.createaccount} onPress={() => {props.navigation.navigate('Register')}}>Não possui cadastro?<Text style={styles.createaccountinner}> Cadastre-se</Text></Text>
-        <Text style = {styles.createaccountinner} onPress={() => {props.navigation.navigate('Register')}}>Esqueci a senha</Text>
+          <Text style = {styles.createaccount} onPress={() => {props.navigation.navigate('Register')}}>Não possui cadastro?<Text style={styles.createaccountinner}> Cadastre-se</Text></Text>
+          <Text style = {styles.createaccountinner} onPress={() => {props.navigation.navigate('Forgot')}}>Esqueci a senha</Text>
         </View>
     )
 }

@@ -23,6 +23,7 @@ const Tab = createBottomTabNavigator();
 const Main  = ( props ) => {
     const username = props.route.params.nome
     const useremail = props.route.params.email
+    const password = props.route.params.password
 
   return (
     <Tab.Navigator screenOptions={{
@@ -30,7 +31,7 @@ const Main  = ( props ) => {
       }} initialRouteName="Home">
         
         <Tab.Screen name="Home"
-            initialParams={{name: username,email: useremail}}
+            initialParams={{name: username,email: useremail,password : password}}
             component={MainHome}options={{headerShown: false,
             tabBarLabel: '',
             tabBarIcon: ({focused}) => (
@@ -50,7 +51,7 @@ const Main  = ( props ) => {
           }}
         />
         <Tab.Screen name="Cats"
-            initialParams={{name: username,email: useremail}}
+            initialParams={{name: username,email: useremail,password : password}}
             component={MainCats} options={{headerShown: false,
             tabBarLabel: '',
             tabBarIcon: ({focused}) => (
@@ -69,7 +70,7 @@ const Main  = ( props ) => {
           }}
         />
         <Tab.Screen name="Config" 
-            initialParams={{name: username,email: useremail}}
+            initialParams={{name: username,email: useremail,password : password}}
             component={MainConfig} options={{headerShown: false,
             tabBarLabel: '',
             tabBarIcon: ({focused}) => (

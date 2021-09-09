@@ -23,8 +23,9 @@ const MainHome  = ( props ) => {
     return (
         <View style = {styles.screen}>
             <Text style = {styles.textmargin}>Ola {props.route.params.name}</Text>
-            <Text style = {styles.textmargin}>Esta nao eh a versao final desta tela</Text>
+            <Text style = {styles.textmargin}>Esta nao eh a versao final desta tela, apenas um placeholder para o esqueleto ser experimentado</Text>
             {adminscreen(username,useremail,props)}
+            <Text style = {styles.createaccount}>*Esta nao sera a versao final da nossa tela*</Text>
         </View>
     )
 }
@@ -50,16 +51,20 @@ const styles = StyleSheet.create({
       color : "#777"
     },
     botao : {
-        marginTop : 50,
-        borderRadius: 10,
-        borderWidth: 1,
+      alignItems: "center",
+      alignSelf: 'center',
+      width: 150,
+      marginTop : 30,
+      borderRadius: 10,
+      backgroundColor:"#C96D1A",
+      padding: 10,
+      marginBottom:100,
     },
     createaccount : {
-      marginBottom : 10,
-      fontSize: 20,
-      textDecorationLine: 'underline',
-      color : "#387cfc"
-    }
+        marginBottom : 10,
+        fontSize: 15,
+        alignSelf: 'center'
+      },
 })
 
 export default MainHome
