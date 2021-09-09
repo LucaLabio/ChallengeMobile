@@ -10,6 +10,9 @@ import {
   } from 'react-native'
 import {read } from '../../BD'
 
+const deslogar = (props) => {
+    props.navigation.navigate('Login')
+  }
 
 const MainConfig  = ( props ) => {
     const [username, changeUsername] = React.useState("");
@@ -32,6 +35,8 @@ const MainConfig  = ( props ) => {
         <Button color="#C96D1A" style = {styles.botao} title="Logon" onPress={() => {validateLogin(username,password,props)}}></Button>
 
         <Text style = {styles.createaccount} onPress={() => {props.navigation.navigate('Register')}}>Ainda nao esta cadastrado? Clique Aqui!</Text>
+
+        <Button title="Sair" onPress={() => {deslogar(props)}}></Button>
         </View>
     )
 }

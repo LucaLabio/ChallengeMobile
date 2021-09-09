@@ -18,6 +18,8 @@ import MainConfig from "./mainconfig";
 
 const Tab = createBottomTabNavigator();
 
+
+
 const Main  = ( props ) => {
     const username = props.route.params.nome
     const useremail = props.route.params.email
@@ -26,6 +28,7 @@ const Main  = ( props ) => {
     <Tab.Navigator screenOptions={{
         tabBarStyle: { position: 'absolute' },
       }} initialRouteName="Home">
+        
         <Tab.Screen name="Home"
             initialParams={{name: username,email: useremail}}
             component={MainHome}options={{headerShown: false,

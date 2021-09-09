@@ -60,7 +60,7 @@ const Login  = ( props ) => {
     //podemos passar valores e variaveis pelo . navigate usando .navigate('nome',{itemId:86,otherParams:'asdasdasda'}) 
     return (
         <View style = {styles.screen}>
-            <TouchableOpacity style = {styles.goback} onPress={() => this.props.navigation.goBack()}>
+            <TouchableOpacity style = {styles.goback} onPress={() => props.navigation.goBack()}>
                 <Image source={require('../images/back.png')} style = {styles.goback} />
             </TouchableOpacity>
             <Image source={require('../images/Meowylogo.png')} style = {styles.logo} />

@@ -14,8 +14,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Login from "./components/screens/login";
 import Register from "./components/screens/register";
 import Main from "./components/screens/main";
-import MainCats from "./components/screens/maincats";
-import MainHome from "./components/screens/mainhome";
+import Admin from "./components/screens/admin";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator()
@@ -29,6 +28,7 @@ const App = () => {
         <Stack.Screen name="Login" component={Login} options={{title : "Login",headerShown: false}}/>
         <Stack.Screen name="Register" component={Register} options={{title : "Register",headerShown: false}}/>
         <Stack.Screen name="Main" component={Main} options={{title : "Main",headerShown: false}}/>
+        <Stack.Screen name="Admin" component={Admin} options={{title : "Admin",headerShown: false}}/>
       </Stack.Navigator>
     </NavigationContainer>    
   )

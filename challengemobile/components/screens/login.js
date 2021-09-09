@@ -13,8 +13,6 @@ import {read } from '../../BD'
 
 
 const validateLogin = async(useremail,password,props) => {
-  console.log(useremail)
-  console.log(password)
   var value = await read(useremail);
   
   console.log(value)
