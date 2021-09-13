@@ -22,7 +22,7 @@ const validateAccount = async(username,password,confirmpassword,email,props) => 
     console.log("Register")
     console.log(value)
     if (username !== null && username !== "" && password !== null && password !== "" && password === confirmpassword && value === null && validateEmail(email)){
-        const obj = [username,password]; 
+        const obj = [[username,password]]; 
         insertObject(email,obj);
 
         Alert.alert(

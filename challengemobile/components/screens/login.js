@@ -16,13 +16,36 @@ const validateLogin = async(useremail,password,props) => {
     var value = await read(useremail);
     console.log("Login")
     console.log(value)
-  if (value !== null){
+  if (value !== null && value.length === 1){
     value = JSON.parse(value)
-    if (password === value[1]){
+    var peopledata = value
+    console.log(peopledata)
+    if (password === peopledata[1]){
       props.navigation.navigate('Main',{
-        nome : value[0],
+        nome : peopledata[0],
         email : useremail,
-        password : value[1]
+        password : peopledata[1]
+      })
+    }
+    else{
+      Alert.alert(
+        "Aviso",
+        "Usuario ou senha invalidos",
+        [
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ]
+      );
+    }
+  }
+  else if (value !== null && value.length > 1){
+    value = JSON.parse(value)
+    var peopledata = value[0]
+    console.log(peopledata)
+    if (password === peopledata[1]){
+      props.navigation.navigate('Main',{
+        nome : peopledata[0],
+        email : useremail,
+        password : peopledata[1]
       })
     }
     else{

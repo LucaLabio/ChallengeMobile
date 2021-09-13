@@ -1,14 +1,7 @@
 import React,{
     useState} from 'react'
 import {
-    Button,
-    Text,
-    StyleSheet,
-    View,
-    TextInput,
-    Alert,
     Image,
-    TouchableOpacity,
   } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MainHome from "./mainhome";
@@ -57,8 +50,8 @@ const Main  = ( props ) => {
             tabBarIcon: ({focused}) => (
               <Image
               source={focused
-                ? require('../images/caticonselected.png')
-                : require('../images/caticon.png')
+                ? require('../images/Meowyselected.png')
+                : require('../images/Meowy.png')
                 }
                 style={{
                     marginTop:15,

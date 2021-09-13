@@ -25,7 +25,9 @@ const validateAccount = async(email,password,props) => {
     console.log(value)
     if (password !== null && password !== "" && value !== null && validateEmail(email)){
         value = JSON.parse(value)
-        const obj = [value[0],password]; 
+        peopledata = value[0]
+        
+        const obj = [peopledata[0],password]; 
         insertObject(email,obj);
 
         Alert.alert(
@@ -55,31 +57,30 @@ const Forgot  = ( props ) => {
     const [password, changePassword] = React.useState("");
     return (
         <View style = {styles.screen}>
-          
           <TouchableOpacity style = {styles.goback} onPress={() => props.navigation.goBack()}>
-                <Image source={require('../images/back.png')} style = {styles.goback} />
-            </TouchableOpacity>
-            <Image source={require('../images/Meowylogo.png')} style = {styles.logo} />
-            <Text style = {styles.header}>Esqueci a Senha</Text>
-            <Text style = {styles.textmargin}>E-mail</Text>
-            <TextInput
-                style = {styles.input}
-                onChangeText={changeEmail}
-                value={useremail}
-            />
-            <Text style = {styles.textmargin}>Nova senha</Text>
-            <TextInput
-                style = {styles.input}
-                onChangeText={changePassword}
-                value={password}
-                secureTextEntry={true}
-            />
+              <Image source={require('../images/back.png')} style = {styles.goback} />
+          </TouchableOpacity>
+          <Image source={require('../images/Meowylogo.png')} style = {styles.logo} />
+          <Text style = {styles.header}>Esqueci a Senha</Text>
+          <Text style = {styles.textmargin}>E-mail</Text>
+          <TextInput
+              style = {styles.input}
+              onChangeText={changeEmail}
+              value={useremail}
+          />
+          <Text style = {styles.textmargin}>Nova senha</Text>
+          <TextInput
+              style = {styles.input}
+              onChangeText={changePassword}
+              value={password}
+              secureTextEntry={true}
+          />
 
-            <TouchableOpacity style = {styles.botao} onPress={() => {validateAccount(useremail,password,props)}}>
+          <TouchableOpacity style = {styles.botao} onPress={() => {validateAccount(useremail,password,props)}}>
             <Text style = {styles.insidetext}>Entrar</Text>
-            </TouchableOpacity>
+          </TouchableOpacity>
 
-            <Text style = {styles.createaccount}>*Esta nao sera a versao final da nossa tela*</Text>
+          <Text style = {styles.disclaimer}>*Esta nao sera a versao final da nossa tela*</Text>
         </View>
     )
 }
@@ -128,7 +129,7 @@ const styles = StyleSheet.create({
       padding: 10,
       marginBottom:100,
     },
-    createaccount : {
+    disclaimer : {
       marginBottom : 10,
       fontSize: 15,
       alignSelf: 'center'
