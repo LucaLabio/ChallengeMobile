@@ -1,5 +1,5 @@
 import React,{
-    useState} from 'react'
+    useState, useEffect} from 'react'
 import {
     Text,
     StyleSheet,
@@ -9,54 +9,27 @@ import {
     Image,
     TouchableOpacity
   } from 'react-native'
-import {read } from '../../BD'
 
 
-const validateLogin = async(useremail,password,props) => {
-    var value = await read(useremail);
-    console.log("Login")
-    console.log(value)
-  if (value !== null && value.length === 1){
-    value = JSON.parse(value)
-    var peopledata = value
-    console.log(peopledata)
-    if (password === peopledata[1]){
-      props.navigation.navigate('Main',{
-        nome : peopledata[0],
-        email : useremail,
-        password : peopledata[1]
-      })
-    }
-    else{
-      Alert.alert(
-        "Aviso",
-        "Usuario ou senha invalidos",
-        [
-          { text: "OK", onPress: () => console.log("OK Pressed") }
-        ]
-      );
-    }
+
+
+const makelogin = (article,userPassword,props) => {
+  if (article === {}){
+    Alert.alert(
+      "Aviso",
+      "Usuario ou senha invalidos",
+      [
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ]
+    );
   }
-  else if (value !== null && value.length > 1){
-    value = JSON.parse(value)
-    var peopledata = value[0]
-    console.log(peopledata)
-    if (password === peopledata[1]){
-      props.navigation.navigate('Main',{
-        nome : peopledata[0],
-        email : useremail,
-        password : peopledata[1]
-      })
-    }
-    else{
-      Alert.alert(
-        "Aviso",
-        "Usuario ou senha invalidos",
-        [
-          { text: "OK", onPress: () => console.log("OK Pressed") }
-        ]
-      );
-    }
+  else if (userPassword === article[Object.keys(article)[0]]['password']){
+    props.navigation.navigate('Main',{
+      userId : Object.keys(article)[0],
+      nome : article[Object.keys(article)[0]]['name'],
+      email : article[Object.keys(article)[0]]['email'],
+      password : article[Object.keys(article)[0]]['password']
+    })
   }
   else{
     Alert.alert(
@@ -69,8 +42,25 @@ const validateLogin = async(useremail,password,props) => {
   }
 }
 
+function getUser(userMail,userPassword,props) {
+  
+  fetch('http://10.0.2.2:5000/api/firebasestorage/get_user/?' + new URLSearchParams({
+    email: userMail
+}), {
+  method:'GET',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
+  }
+  })
+  .then(resp => resp.json())
+  .then(article => {
+    makelogin(article,userPassword,props)
+  })
+}
 
 const Login  = ( props ) => {
+
     const [useremail, changeEmail] = React.useState("");
     const [password, changePassword] = React.useState("");
     return (
@@ -91,7 +81,7 @@ const Login  = ( props ) => {
               secureTextEntry={true}
           />
 
-          <TouchableOpacity style = {styles.botao} onPress={() => {validateLogin(useremail,password,props)}}>
+          <TouchableOpacity style = {styles.botao} onPress={() => {getUser(useremail,password,props)}}>
             <Text style = {styles.insidetext}>Entrar</Text>
           </TouchableOpacity>
 

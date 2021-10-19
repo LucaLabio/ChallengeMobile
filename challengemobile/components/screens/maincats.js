@@ -7,6 +7,7 @@ import {
     StyleSheet,
     View,
     TextInput,
+    ScrollView,
     Alert,
     TouchableOpacity,
     FlatList,
@@ -15,13 +16,54 @@ import {
   } from 'react-native'
 import {read } from '../../BD'
 
+function generateData(article){
+  console.log(`article`)
+  var catList = [];
+  for (const cats of Object.keys(article)) {
+    console.log(cats)
+    catList.push(article[cats])
+    
+  }
+  console.log(catList)
+  return catList;
+}
+
 
 const MainCats = ( props ) => {
+  const userID =  props.route.params.userId
   const email = props.route.params.email
 
-  const data = [{name:"Senhor Gato",racecategory:"Gato manhoso",wheightcategory:"2KG",sexcategory:"Masculino",birthdaycategory:"02/03/2015"}]
+  console.log(userID)
 
+  const [data, setData] = useState([])
+
+  useEffect(() => {
+    fetch(`http://10.0.2.2:5000/api/firebasestorage/get_cats/${userID}` ,{
+      method:'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(resp => resp.json())
+    .then(article => {
+      console.log(`article`)
+      var catList = [];
+      for (const cats of Object.keys(article)) {
+        console.log(cats)
+        catList.push(article[cats])
+        
+      }
+      setData(catList)
+    })
+  },[])
+
+
+  
+  console.log(data)
       return (
+      <SafeAreaView>
+      <ScrollView>
         <View style = {styles.screen} >
           <Text style = {styles.createaccount} onPress={() => {props.navigation.navigate('RegisterCat',{
             nome : null,
@@ -30,44 +72,40 @@ const MainCats = ( props ) => {
           <SafeAreaView>
             <FlatList data={data} keyExtractor={item => item.name} renderItem={({ item }) => {
               return (
-              <View style={styles.Box}>
-                <Text style={styles.nametext}>{item.name}</Text>
-                <View style={styles.row}>
-                  <Text style={styles.maintext}>Raça</Text>
-                  <Text style={styles.category}>{item.racecategory}</Text>
+                <View style={styles.Box}>
+                  <Text style={styles.nametext}>{item.name}</Text>
+                  <View style={styles.row}>
+                    <Text style={styles.maintext}>Raça</Text>
+                    <Text style={styles.category}>{item.race}</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Text style={styles.maintext}>Peso:</Text>
+                    <Text style={styles.category}>{item.weight}</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Text style={styles.maintext}>Sexo</Text>
+                    <Text style={styles.category}>{item.sex}</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Text style={styles.maintext}>Data Nascimento</Text>
+                    <Text style={styles.category}>{item.birthdate}</Text>
+                  </View>
+                  <View style={styles.buttonrow}>
+                    <TouchableOpacity style = {styles.leftbutton} onPress={() => Alert.alert("Aviso","Esta funcionalidade ainda nao foi implementada",[{ text: "OK"}])}>
+                      <Text style = {styles.insidetext}>-Editar</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style = {styles.rightbutton} onPress={() => Alert.alert("Aviso","Esta funcionalidade ainda nao foi implementada",[{ text: "OK"}])}>
+                      <Text style = {styles.insidetext}>X Apagar</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-                <View style={styles.row}>
-                  <Text style={styles.maintext}>Peso:</Text>
-                  <Text style={styles.category}>{item.wheightcategory}</Text>
-                </View>
-                <View style={styles.row}>
-                  <Text style={styles.maintext}>Sexo</Text>
-                  <Text style={styles.category}>{item.sexcategory}</Text>
-                </View>
-                <View style={styles.row}>
-                  <Text style={styles.maintext}>Data Nascimento</Text>
-                  <Text style={styles.category}>{item.birthdaycategory}</Text>
-                </View>
-                <View style={styles.buttonrow}>
-                <TouchableOpacity style = {styles.leftbutton} onPress={() => Alert.alert("Aviso","Esta funcionalidade ainda nao foi implementada",[{ text: "OK"}])}>
-                  <Text style = {styles.insidetext}>-Editar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style = {styles.rightbutton} onPress={() => Alert.alert("Aviso","Esta funcionalidade ainda nao foi implementada",[{ text: "OK"}])}>
-                  <Text style = {styles.insidetext}>X Apagar</Text>
-              </TouchableOpacity>
-            </View>
-            
-          </View>
-          
-        );
-        
-      }}
-  />
-        </SafeAreaView>
-        <Text style = {styles.disclaimer}>*Esta nao sera a versao final da nossa tela*</Text>
-    </View>
-    )
-}
+              );}}/>
+          </SafeAreaView>
+          <Text style = {styles.disclaimer}>*Esta nao sera a versao final da nossa tela*</Text>
+        </View>
+      </ScrollView>
+      </SafeAreaView>
+    )}
 
 const styles = StyleSheet.create({
     screen : {

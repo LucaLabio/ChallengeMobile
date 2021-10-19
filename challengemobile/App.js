@@ -1,5 +1,5 @@
 import React,{
-  useState} from 'react';
+  useState, useEffect} from 'react';
 import { DefaultTheme,NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -10,12 +10,19 @@ import Admin from "./components/screens/admin";
 import Forgot from "./components/screens/forgot";
 import RegisterCat from "./components/screens/registercat";
 
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator()
 const navTheme = DefaultTheme;
 navTheme.colors.background = '#E5E5E5';
 
+
+
 const App = () => {
+  
+
+
+
   return (
     <NavigationContainer  theme={navTheme}>
       <Stack.Navigator initialRouteName="Login" independent={true}>

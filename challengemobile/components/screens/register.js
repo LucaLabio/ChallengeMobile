@@ -3,6 +3,8 @@ import React,{
 import {
     Text,
     StyleSheet,
+    SafeAreaView,
+    ScrollView,
     View,
     TextInput,
     Alert,
@@ -17,21 +19,34 @@ const validateEmail = (email) => {
         return re.test(email);
 }
 
-const validateAccount = async(username,password,confirmpassword,email,props) => {
-    const value = await read(email);
-    console.log("Register")
-    console.log(value)
-    if (username !== null && username !== "" && password !== null && password !== "" && password === confirmpassword && value === null && validateEmail(email)){
-        const obj = [[username,password]]; 
-        insertObject(email,obj);
+const validateAccount = (article,username,password,confirmpassword,email,props) => {
 
-        Alert.alert(
+    
+    if (username !== null && username !== "" && password !== null && password !== "" && password === confirmpassword && validateEmail(email) && Object.keys(article).length === 0){
+        
+        fetch('http://10.0.2.2:5000/api/firebasestorage/insert_user/', {
+            method:'POST',
+            headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+            name: username,
+            email: email,
+            password: password
+            })
+        })
+        .then(resp => resp.json())
+        .then(article => {
+            console.log("ok")
+            Alert.alert(
             "Aviso",
             "Usuario criado",
             [
                 { text: "OK", onPress: () => props.navigation.navigate('Login') }
             ]
             );
+        })
     }
     else if(password != confirmpassword){
         Alert.alert(
@@ -54,6 +69,24 @@ const validateAccount = async(username,password,confirmpassword,email,props) => 
 }
 
 
+function getUser(username,password,confirmpassword,userEmail,props) {
+  
+    fetch('http://10.0.2.2:5000/api/firebasestorage/get_user/?' + new URLSearchParams({
+    email: userEmail
+}), {
+    method:'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    }
+    })
+    .then(resp => resp.json())
+    .then(article => {
+        validateAccount(article,username,password,confirmpassword,userEmail,props)
+    })  
+  }
+
+
 const Login  = ( props ) => {
     const [username, changeUsername] = React.useState("");
     const [password, changePassword] = React.useState("");
@@ -61,44 +94,48 @@ const Login  = ( props ) => {
     const [email, changeEmail] = React.useState("");
     //podemos passar valores e variaveis pelo . navigate usando .navigate('nome',{itemId:86,otherParams:'asdasdasda'}) 
     return (
-        <View style = {styles.screen}>
-            <TouchableOpacity style = {styles.goback} onPress={() => props.navigation.goBack()}>
-                <Image source={require('../images/back.png')} style = {styles.goback} />
-            </TouchableOpacity>
-            <Image source={require('../images/Meowylogo.png')} style = {styles.logo} />
-            <Text style = {styles.header}>Cadastro</Text>
-            <Text style = {styles.textmargin}>Digite seu usuario:</Text>
-            <TextInput
-                style = {styles.input}
-                onChangeText={changeUsername}
-                value={username}
-            />
-            <Text style = {styles.textmargin}>Digite seu email:</Text>
-            <TextInput
-                style = {styles.input}
-                onChangeText={changeEmail}
-                value={email}
-            />
-            <Text style = {styles.textmargin}>Digite sua senha:</Text>
-            <TextInput
-                style = {styles.input}
-                onChangeText={changePassword}
-                value={password}
-                secureTextEntry={true}
-            />
-            <Text style = {styles.textmargin}>Confirme sua senha:</Text>
-            <TextInput
-                style = {styles.input}
-                onChangeText={changeConfirmPassword}
-                value={confirmpassword}
-                secureTextEntry={true}
-            />
-            
-            <TouchableOpacity style = {styles.botao} onPress={() => {validateAccount(username,password,confirmpassword,email,props)}}>
-                <Text style = {styles.insidetext}>Cadastrar</Text>
-            </TouchableOpacity>
+        <SafeAreaView>
+            <ScrollView>
+                <View style = {styles.screen}>
+                    <TouchableOpacity style = {styles.goback} onPress={() => props.navigation.goBack()}>
+                        <Image source={require('../images/back.png')} style = {styles.goback} />
+                    </TouchableOpacity>
+                    <Image source={require('../images/Meowylogo.png')} style = {styles.logo} />
+                    <Text style = {styles.header}>Cadastro</Text>
+                    <Text style = {styles.textmargin}>Digite seu usuario:</Text>
+                    <TextInput
+                        style = {styles.input}
+                        onChangeText={changeUsername}
+                        value={username}
+                    />
+                    <Text style = {styles.textmargin}>Digite seu email:</Text>
+                    <TextInput
+                        style = {styles.input}
+                        onChangeText={changeEmail}
+                        value={email}
+                    />
+                    <Text style = {styles.textmargin}>Digite sua senha:</Text>
+                    <TextInput
+                        style = {styles.input}
+                        onChangeText={changePassword}
+                        value={password}
+                        secureTextEntry={true}
+                    />
+                    <Text style = {styles.textmargin}>Confirme sua senha:</Text>
+                    <TextInput
+                        style = {styles.input}
+                        onChangeText={changeConfirmPassword}
+                        value={confirmpassword}
+                        secureTextEntry={true}
+                    />
+                    
+                    <TouchableOpacity style = {styles.botao} onPress={() => {getUser(username,password,confirmpassword,email,props)}}>
+                        <Text style = {styles.insidetext}>Cadastrar</Text>
+                    </TouchableOpacity>
 
-        </View>
+                </View>
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 
