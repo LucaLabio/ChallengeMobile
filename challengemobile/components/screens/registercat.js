@@ -12,44 +12,41 @@ import {
 
 import { insertObject,read } from '../../BD'
 
-const makecat = async(nome,peso,sexo,raca,data,email,props) => {
-    var value = await read(email);
-    value = JSON.parse(value)
-    console.log("registercat")
-    console.log(value)
-    console.log(email)
-    var obj = value
+
+const makecat = (nome,peso,sexo,raca,data,owner_Id,props) => {
+
     if (nome !== null && nome !== "" && peso !== null && peso !== "" && sexo !== null && sexo !== "" && raca !== null && raca !== "" && data !== null && data !== ""){
-        obj.push([{  name: nome, race: "Raça:", racecategory: raca,
-        wheight: "Peso:",wheightcategory : peso, sex: "Sexo:",
-        sexcategory :sexo ,birthday: "Data nascimento:",
-        birthdaycategory : data }])
-
-        console.log(obj)
-
-        insertObject(email,obj);
-
-        Alert.alert(
+        fetch('http://10.0.2.2:5000/api/firebasestorage/insert_cat/', {
+            method:'POST',
+            headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+            name: nome,
+            ownerId: owner_Id,
+            race: raca,
+            sex: sexo,
+            weight: peso,
+            birthdate: data
+            })
+        })
+        .then(resp => resp.json())
+        .then(article => {
+            console.log("Gato cadastrado")
+            Alert.alert(
             "Aviso",
-            "Gato gerado",
+            "Gato Cadastrado",
             [
                 { text: "OK", onPress: () => props.navigation.goBack() }
             ]
             );
-    }
-    else if(password != confirmpassword){
-        Alert.alert(
-            "Aviso",
-            "Sua senhas estao diferentes",
-            [
-                { text: "OK", onPress: () => console.log("OK Pressed") }
-            ]
-            );
+        })
     }
     else{
         Alert.alert(
             "Aviso",
-            "Usuario ja existente ou você digitou alguma informação incorretamente",
+            "Você digitou alguma informação incorretamente",
             [
                 { text: "OK", onPress: () => console.log("OK Pressed") }
             ]
@@ -60,11 +57,14 @@ const makecat = async(nome,peso,sexo,raca,data,email,props) => {
 
 const RegisterCat  = ( props ) => {
     
+    const userID =  props.route.params.userId
+
     const [catName, changeNome ] = React.useState(props.route.params.nome===null ? "" : props.route.params.nome);
     const [catPeso, changePeso ] = React.useState(props.route.params.nome===null ? "" : props.route.params.peso);
     const [catSexo, changeSexo ] = React.useState(props.route.params.nome===null ? "" : props.route.params.sexo);
     const [catRaca, changeRaca ] = React.useState(props.route.params.nome===null ? "" : props.route.params.raca);
     const [catData, changeData ] = React.useState(props.route.params.nome===null ? "" : props.route.params.data);
+
     return (
         <View style = {styles.screen}>
             <TouchableOpacity style = {styles.goback} onPress={() => props.navigation.goBack()}>
@@ -117,7 +117,7 @@ const RegisterCat  = ( props ) => {
 
         
             
-            <TouchableOpacity style = {styles.botao} onPress={() => {makecat(catName,catPeso,catSexo,catRaca,catData,props.route.params.email,props)}}>
+            <TouchableOpacity style = {styles.botao} onPress={() => {makecat(catName,catPeso,catSexo,catRaca,catData,userID,props)}}>
                 <Text style = {styles.insidetext}>Cadastrar</Text>
             </TouchableOpacity>
 

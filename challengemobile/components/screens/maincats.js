@@ -12,26 +12,64 @@ import {
     TouchableOpacity,
     FlatList,
     SafeAreaView,
-    ActivityIndicator
+    ActivityIndicator,
+    RefreshControl
   } from 'react-native'
 import {read } from '../../BD'
 
-function generateData(article){
-  console.log(`article`)
-  var catList = [];
-  for (const cats of Object.keys(article)) {
-    console.log(cats)
-    catList.push(article[cats])
-    
-  }
-  console.log(catList)
-  return catList;
+const deleteCats = (catID) => {
+  fetch(`http://10.0.2.2:5000/api/firebasestorage/delete_cat/${catID}` ,{
+      method:'DELETE',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(article => {
+      Alert.alert("Aviso","Gato deletado com sucesso, para atualizar a lista, suba ao topo e arraste para baixo",[{ text: "OK"}])
+    })
+
 }
 
 
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
+
+
+
 const MainCats = ( props ) => {
+
+
   const userID =  props.route.params.userId
   const email = props.route.params.email
+
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+    fetch(`http://10.0.2.2:5000/api/firebasestorage/get_cats/${userID}` ,{
+      method:'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(resp => resp.json())
+    .then(article => {
+      console.log(`article`)
+      var catList = [];
+      for (const cats of Object.keys(article)) {
+        console.log(cats)
+        article[cats]['cat_id'] = cats
+        catList.push(article[cats])
+        console.log(catList)
+        
+      }
+      setData(catList)
+    })
+  }, []);
 
   console.log(userID)
 
@@ -51,7 +89,9 @@ const MainCats = ( props ) => {
       var catList = [];
       for (const cats of Object.keys(article)) {
         console.log(cats)
+        article[cats]['cat_id'] = cats
         catList.push(article[cats])
+        console.log(catList)
         
       }
       setData(catList)
@@ -63,11 +103,15 @@ const MainCats = ( props ) => {
   console.log(data)
       return (
       <SafeAreaView>
-      <ScrollView>
+      <ScrollView refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }>
         <View style = {styles.screen} >
           <Text style = {styles.createaccount} onPress={() => {props.navigation.navigate('RegisterCat',{
-            nome : null,
-            email: email
+            userId : userID
           })}}>+ Adicionar Gatinho</Text>
           <SafeAreaView>
             <FlatList data={data} keyExtractor={item => item.name} renderItem={({ item }) => {
@@ -91,10 +135,12 @@ const MainCats = ( props ) => {
                     <Text style={styles.category}>{item.birthdate}</Text>
                   </View>
                   <View style={styles.buttonrow}>
-                    <TouchableOpacity style = {styles.leftbutton} onPress={() => Alert.alert("Aviso","Esta funcionalidade ainda nao foi implementada",[{ text: "OK"}])}>
+                    <TouchableOpacity style = {styles.leftbutton} onPress={() => {props.navigation.navigate('RegisterCat',{
+                      nome : ""
+                    })}}>
                       <Text style = {styles.insidetext}>-Editar</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style = {styles.rightbutton} onPress={() => Alert.alert("Aviso","Esta funcionalidade ainda nao foi implementada",[{ text: "OK"}])}>
+                    <TouchableOpacity style = {styles.rightbutton} onPress={() => deleteCats(item.cat_id)}>
                       <Text style = {styles.insidetext}>X Apagar</Text>
                     </TouchableOpacity>
                   </View>
