@@ -114,7 +114,7 @@ const MainCats = ( props ) => {
             userId : userID
           })}}>+ Adicionar Gatinho</Text>
           <SafeAreaView>
-            <FlatList data={data} keyExtractor={item => item.name} renderItem={({ item }) => {
+            <FlatList data={data} keyExtractor={item => item.cat_id} renderItem={({ item }) => {
               return (
                 <View style={styles.Box}>
                   <Text style={styles.nametext}>{item.name}</Text>
@@ -136,7 +136,13 @@ const MainCats = ( props ) => {
                   </View>
                   <View style={styles.buttonrow}>
                     <TouchableOpacity style = {styles.leftbutton} onPress={() => {props.navigation.navigate('RegisterCat',{
-                      nome : ""
+                      nome : item.name,
+                      raca : item.race,
+                      peso : String(item.weight),
+                      sexo : item.sex,
+                      data : item.birthdate,
+                      userId : userID,
+                      catID : item.cat_id
                     })}}>
                       <Text style = {styles.insidetext}>-Editar</Text>
                     </TouchableOpacity>

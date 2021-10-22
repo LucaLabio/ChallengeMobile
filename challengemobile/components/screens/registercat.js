@@ -12,6 +12,57 @@ import {
 
 import { insertObject,read } from '../../BD'
 
+const catoverseer = (catName,catPeso,catSexo,catRaca,catData,userID,catID,props) => {
+    if(catID === ""){
+        makecat(catName,catPeso,catSexo,catRaca,catData,userID,props)
+    }
+    else{
+        updatecat(catName,catPeso,catSexo,catRaca,catData,userID,catID,props)
+    }
+}
+
+const updatecat = (nome,peso,sexo,raca,data,owner_Id,catID,props) => {
+    if (nome !== null && nome !== "" && peso !== null && peso !== "" && sexo !== null && sexo !== "" && raca !== null && raca !== "" && data !== null && data !== ""){
+        fetch(`http://10.0.2.2:5000/api/firebasestorage/update_cat/${catID}`, {
+            method:'PUT',
+            headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+            name: nome,
+            ownerId: owner_Id,
+            race: raca,
+            sex: sexo,
+            weight: peso,
+            birthdate: data
+            })
+        })
+        .then(resp =>{
+            console.log(resp)
+            resp.json()})
+        .then(article => {
+            console.log("Gato atualizado")
+            Alert.alert(
+            "Aviso",
+            "Gato Atualizado com sucesso",
+            [
+                { text: "OK", onPress: () => props.navigation.goBack() }
+            ]
+            );
+        })
+    }
+    else{
+        Alert.alert(
+            "Aviso",
+            "Você digitou alguma informação incorretamente",
+            [
+                { text: "OK", onPress: () => console.log("OK Pressed") }
+            ]
+        );
+    }
+}
+
 
 const makecat = (nome,peso,sexo,raca,data,owner_Id,props) => {
 
@@ -59,11 +110,13 @@ const RegisterCat  = ( props ) => {
     
     const userID =  props.route.params.userId
 
+    const catID = props.route.params.catID===null ? "" : props.route.params.catID
+
     const [catName, changeNome ] = React.useState(props.route.params.nome===null ? "" : props.route.params.nome);
-    const [catPeso, changePeso ] = React.useState(props.route.params.nome===null ? "" : props.route.params.peso);
-    const [catSexo, changeSexo ] = React.useState(props.route.params.nome===null ? "" : props.route.params.sexo);
-    const [catRaca, changeRaca ] = React.useState(props.route.params.nome===null ? "" : props.route.params.raca);
-    const [catData, changeData ] = React.useState(props.route.params.nome===null ? "" : props.route.params.data);
+    const [catPeso, changePeso ] = React.useState(props.route.params.peso===null ? "" : props.route.params.peso);
+    const [catSexo, changeSexo ] = React.useState(props.route.params.sexo===null ? "" : props.route.params.sexo);
+    const [catRaca, changeRaca ] = React.useState(props.route.params.raca===null ? "" : props.route.params.raca);
+    const [catData, changeData ] = React.useState(props.route.params.data===null ? "" : props.route.params.data);
 
     return (
         <View style = {styles.screen}>
@@ -117,7 +170,7 @@ const RegisterCat  = ( props ) => {
 
         
             
-            <TouchableOpacity style = {styles.botao} onPress={() => {makecat(catName,catPeso,catSexo,catRaca,catData,userID,props)}}>
+            <TouchableOpacity style = {styles.botao} onPress={() => {catoverseer(catName,catPeso,catSexo,catRaca,catData,userID,catID,props)}}>
                 <Text style = {styles.insidetext}>Cadastrar</Text>
             </TouchableOpacity>
 
