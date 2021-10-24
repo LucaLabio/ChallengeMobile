@@ -18,7 +18,7 @@ import {
 import {read } from '../../BD'
 
 const deleteCats = (catID) => {
-  fetch(`http://10.0.2.2:5000/api/firebasestorage/delete_cat/${catID}` ,{
+  fetch(`https://mobile-challenge-api.herokuapp.com/api/firebasestorage/delete_cat/${catID}` ,{
       method:'DELETE',
       headers: {
         Accept: 'application/json',
@@ -49,7 +49,7 @@ const MainCats = ( props ) => {
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     wait(2000).then(() => setRefreshing(false));
-    fetch(`http://10.0.2.2:5000/api/firebasestorage/get_cats/${userID}` ,{
+    fetch(`https://mobile-challenge-api.herokuapp.com/api/firebasestorage/get_cats/${userID}` ,{
       method:'GET',
       headers: {
         Accept: 'application/json',
@@ -76,7 +76,7 @@ const MainCats = ( props ) => {
   const [data, setData] = useState([])
 
   useEffect(() => {
-    fetch(`http://10.0.2.2:5000/api/firebasestorage/get_cats/${userID}` ,{
+    fetch(`https://mobile-challenge-api.herokuapp.com/api/firebasestorage/get_cats/${userID}` ,{
       method:'GET',
       headers: {
         Accept: 'application/json',
@@ -153,7 +153,6 @@ const MainCats = ( props ) => {
                 </View>
               );}}/>
           </SafeAreaView>
-          <Text style = {styles.disclaimer}>*Esta nao sera a versao final da nossa tela*</Text>
         </View>
       </ScrollView>
       </SafeAreaView>

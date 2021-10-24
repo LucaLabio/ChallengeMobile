@@ -44,7 +44,7 @@ const makelogin = (article,userPassword,props) => {
 
 function getUser(userMail,userPassword,props) {
   
-  fetch('http://10.0.2.2:5000/api/firebasestorage/get_user/?' + new URLSearchParams({
+  fetch('https://mobile-challenge-api.herokuapp.com/api/firebasestorage/get_user/?' + new URLSearchParams({
     email: userMail
 }), {
   method:'GET',

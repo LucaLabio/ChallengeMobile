@@ -21,10 +21,9 @@ const validateEmail = (email) => {
 
 const validateAccount = (article,username,password,confirmpassword,email,props) => {
 
-    
     if (username !== null && username !== "" && password !== null && password !== "" && password === confirmpassword && validateEmail(email) && Object.keys(article).length === 0){
         
-        fetch('http://10.0.2.2:5000/api/firebasestorage/insert_user/', {
+        fetch('https://mobile-challenge-api.herokuapp.com/api/firebasestorage/insert_user/', {
             method:'POST',
             headers: {
             Accept: 'application/json',
@@ -71,7 +70,7 @@ const validateAccount = (article,username,password,confirmpassword,email,props) 
 
 function getUser(username,password,confirmpassword,userEmail,props) {
   
-    fetch('http://10.0.2.2:5000/api/firebasestorage/get_user/?' + new URLSearchParams({
+    fetch('https://mobile-challenge-api.herokuapp.com/api/firebasestorage/get_user/?' + new URLSearchParams({
     email: userEmail
 }), {
     method:'GET',

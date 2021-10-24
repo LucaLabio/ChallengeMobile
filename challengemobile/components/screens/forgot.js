@@ -17,37 +17,55 @@ const validateEmail = (email) => {
     return re.test(email);
 }
 
-const validateAccount = async(email,password,props) => {
-    console.log(email)
-    console.log(password)
-    var value = await read(email);
-    console.log("Forgotjs")
-    console.log(value)
-    if (password !== null && password !== "" && value !== null && validateEmail(email)){
-        value = JSON.parse(value)
-        peopledata = value[0]
-        
-        const obj = [peopledata[0],password]; 
-        insertObject(email,obj);
 
-        Alert.alert(
-            "Aviso",
-            "Senha alterada com sucesso",
-            [
-                { text: "OK", onPress: () => props.navigation.navigate('Login') }
-            ]
+
+const validateAccount = (userMail,password,props) => {
+  fetch('https://mobile-challenge-api.herokuapp.com/api/firebasestorage/get_user/?' + new URLSearchParams({
+      email: userMail
+      }), {
+      method:'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+      }).then(resp => resp.json())
+      .then(article => {
+        console.log(Object.keys(article)[0])
+        if (password !== null && password !== "" && article.toString() !== "{}" && validateEmail(userMail)){
+          fetch(`https://mobile-challenge-api.herokuapp.com/api/firebasestorage/update_password/${Object.keys(article)[0]}`, {
+            method:'PUT',
+            headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+          password:password
+          })
+            })
+            .then(article => {
+                console.log("ok")
+                Alert.alert(
+                "Aviso",
+                "Senha alterada com sucesso",
+                [
+                  { text: "OK", onPress: () => props.navigation.navigate('Login') }
+                ]
             );
-    }
-    else{
-        Alert.alert(
-            "Aviso",
-            "Email invalido",
-            [
-                { text: "OK", onPress: () => console.log("OK Pressed") }
-            ]
-            );
+          })
         }
-    }
+        else{
+          Alert.alert(
+              "Aviso",
+              "Email ou senha invalido",
+              [
+                  { text: "OK", onPress: () => console.log("OK Pressed") }
+              ]
+              );
+        }
+        
+    })
+}
+  
 
 
 
@@ -79,8 +97,6 @@ const Forgot  = ( props ) => {
           <TouchableOpacity style = {styles.botao} onPress={() => {validateAccount(useremail,password,props)}}>
             <Text style = {styles.insidetext}>Entrar</Text>
           </TouchableOpacity>
-
-          <Text style = {styles.disclaimer}>*Esta nao sera a versao final da nossa tela*</Text>
         </View>
     )
 }

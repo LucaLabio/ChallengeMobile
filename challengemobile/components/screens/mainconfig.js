@@ -21,12 +21,6 @@ const MainConfig  = ( props ) => {
             
             <Text style = {styles.textmargin}>Email: {props.route.params.email}</Text>
 
-            <Text style = {styles.textmargin}>Senha: {props.route.params.password}</Text>
-            
-            <Text style = {styles.textmargin}>Ativar notificacoes:</Text>
-
-            <Text style = {styles.textmargin}>Notificacao de agua:</Text>
-
             <TouchableOpacity style = {styles.botao} onPress={() => {deslogar(props)}}>
                     <Text style = {styles.insidetext}>Sair</Text>
             </TouchableOpacity>

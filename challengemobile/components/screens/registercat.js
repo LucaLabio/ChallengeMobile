@@ -13,7 +13,10 @@ import {
 import { insertObject,read } from '../../BD'
 
 const catoverseer = (catName,catPeso,catSexo,catRaca,catData,userID,catID,props) => {
+    console.log(typeof catID)
+    console.log(catID)
     if(catID === ""){
+        console.log("makeKAt")
         makecat(catName,catPeso,catSexo,catRaca,catData,userID,props)
     }
     else{
@@ -23,7 +26,7 @@ const catoverseer = (catName,catPeso,catSexo,catRaca,catData,userID,catID,props)
 
 const updatecat = (nome,peso,sexo,raca,data,owner_Id,catID,props) => {
     if (nome !== null && nome !== "" && peso !== null && peso !== "" && sexo !== null && sexo !== "" && raca !== null && raca !== "" && data !== null && data !== ""){
-        fetch(`http://10.0.2.2:5000/api/firebasestorage/update_cat/${catID}`, {
+        fetch(`https://mobile-challenge-api.herokuapp.com/api/firebasestorage/update_cat/${catID}`, {
             method:'PUT',
             headers: {
             Accept: 'application/json',
@@ -67,7 +70,7 @@ const updatecat = (nome,peso,sexo,raca,data,owner_Id,catID,props) => {
 const makecat = (nome,peso,sexo,raca,data,owner_Id,props) => {
 
     if (nome !== null && nome !== "" && peso !== null && peso !== "" && sexo !== null && sexo !== "" && raca !== null && raca !== "" && data !== null && data !== ""){
-        fetch('http://10.0.2.2:5000/api/firebasestorage/insert_cat/', {
+        fetch('https://mobile-challenge-api.herokuapp.com/api/firebasestorage/insert_cat/', {
             method:'POST',
             headers: {
             Accept: 'application/json',
@@ -110,7 +113,7 @@ const RegisterCat  = ( props ) => {
     
     const userID =  props.route.params.userId
 
-    const catID = props.route.params.catID===null ? "" : props.route.params.catID
+    const catID = props.route.params.catID===undefined ? "" : props.route.params.catID
 
     const [catName, changeNome ] = React.useState(props.route.params.nome===null ? "" : props.route.params.nome);
     const [catPeso, changePeso ] = React.useState(props.route.params.peso===null ? "" : props.route.params.peso);
